@@ -95,7 +95,60 @@ class Post
     printf("Error: %s.\n", $stmt->error);
     return false;
   }
+  // Update post function
+  public function update_post()
+  {
+    $query = 'UPDATE ' . $this->table . ' 
+    SET
+      title = :title,
+      body = :body,
+      author = :author,
+      category_id = :category_id
+    WHERE
+      id = :id';
+    // Prepare the statement
+    $stmt = $this->conn->prepare($query);
+    // Probably should 'clean' the data since it's coming from the user.
+    $this->title = htmlspecialchars(strip_tags($this->title));
+    $this->body = htmlspecialchars(strip_tags($this->body));
+    $this->author = htmlspecialchars(strip_tags($this->author));
+    $this->category_id = htmlspecialchars(strip_tags($this->category_id));
+    $this->id = htmlspecialchars(strip_tags($this->id));
 
-  // Need to add update post function
+    // Need to Bind data
+    $stmt->bindParam('title', $this->title);
+    $stmt->bindParam('body', $this->body);
+    $stmt->bindParam('author', $this->author);
+    $stmt->bindParam('category_id', $this->category_id);
+    $stmt->bindParam(':id', $this->id);
+
+    // Execute the query
+    if ($stmt->execute()) {
+      return true;
+    }
+
+    // If there is an error
+    printf("Error: %s.\n", $stmt->error);
+    return false;
+  }
   // Need to add delete post function
+  public function delete_post()
+  {
+    // Create Query
+    $query = 'DELETE FROM ' . $this->table . ' WHERE id = :id';
+    // Prepare Query for execution
+    $stmt = $this->conn->prepare($query);
+    // Clean the data
+    $this->id = htmlspecialchars(strip_tags($this->id));
+    // Bind the id
+    $stmt->bindParam(':id', $this->id);
+    // Execute the query
+    if ($stmt->execute()) {
+      return true;
+    }
+
+    // If there is an error
+    printf("Error: %s.\n", $stmt->error);
+    return false;
+  }
 }
