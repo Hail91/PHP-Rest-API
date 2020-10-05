@@ -1,32 +1,32 @@
-<?php 
-  // Headers
-  header('Access-Control-Allow-Origin: *');
-  header('Content-Type: application/json');
+<?php
+// Headers
+header('Access-Control-Allow-Origin: *');
+header('Content-Type: application/json');
 
-  include_once '../../config/Database.php';
-  include_once '../../models/Post.php';
+include_once '../../config/Database.php';
+include_once '../../models/Post.php';
 
-  // Instantiate DB & connect
-  $database = new Database();
-  $db = $database->connect();
+// Instantiate DB & connect
+$database = new Database();
+$db = $database->connect();
 
-  // Instantiate blog post object
-  $post = new Post($db);
+// Instantiate blog post object
+$post = new Post($db);
 
-  // Get Post by id
-  $post->id = isset($_GET['id']) ? $_GET['id'] : die();
+// Get Post by id
+$post->id = isset($_GET['id']) ? $_GET['id'] : die();
 
-  // Get Post by calling get_single_post method from Post DB Model
-  $post->get_single_post();
+// Get Post by calling get_single_post method from Post DB Model
+$post->get_single_post();
 
-  // Create array
-  $post_arr = array(
-      'id' => $post->id,
-      'title' => $post->title,
-      'body' => $post->body,
-      'author' => $post->author,
-      'category_id' => $post->category_id,
-      'category_name' => $post->category_name,
-  );
+// Create array
+$post_arr = array(
+  'id' => $post->id,
+  'title' => $post->title,
+  'body' => $post->body,
+  'author' => $post->author,
+  'category_id' => $post->category_id,
+  'category_name' => $post->category_name,
+);
 
-  print_r(json_encode($post_arr));
+print_r(json_encode($post_arr));
